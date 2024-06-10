@@ -46,7 +46,7 @@ describe('Test `main` sync.', () => {
 
     it('Should return the file data as a `string` when able to obtain the file!', () => {
       const received = main('package.json')
-      const expected = "{}"
+      const expected = '{}'
 
       expect(received).toBe(expected)
     })
