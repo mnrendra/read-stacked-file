@@ -160,7 +160,7 @@ describe('Test all features.', () => {
 
       it('Should resolve the file data when able to obtain the file!', async () => {
         const received = await main('package.json')
-        const expected = "{}"
+        const expected = '{}'
 
         expect(received).toBe(expected)
       })
@@ -241,7 +241,7 @@ describe('Test all features.', () => {
 
       it('Should return the file data as a `string` when able to obtain the file!', () => {
         const received = mainSync('package.json')
-        const expected = "{}"
+        const expected = '{}'
 
         expect(received).toBe(expected)
       })

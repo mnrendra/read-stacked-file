@@ -46,7 +46,7 @@ describe('Test `index` async.', () => {
 
     it('Should resolve the file data when able to obtain the file!', async () => {
       const received = await index('package.json')
-      const expected = "{}"
+      const expected = '{}'
 
       expect(received).toBe(expected)
     })
