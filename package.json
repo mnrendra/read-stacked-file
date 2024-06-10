@@ -1,7 +1,7 @@
 {
   "name": "@mnrendra/read-stacked-file",
   "version": "0.0.0-development",
-  "description": "Read the stacked file using the stack trace.",
+  "description": "Read the stacked file from any sub-directory in your project.",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -25,7 +25,9 @@
     "url": "https://github.com/mnrendra/read-stacked-file/issues"
   },
   "homepage": "https://github.com/mnrendra/read-stacked-file#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@mnrendra/stack-trace": "^1.0.0"
+  },
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
