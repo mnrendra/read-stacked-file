@@ -1,5 +1,5 @@
-import * as main from './main'
+import validSkippedStacks from './validSkippedStacks'
 
 export {
-  main
+  validSkippedStacks
 }
