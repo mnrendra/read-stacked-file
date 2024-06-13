@@ -1,8 +1,9 @@
 import { join } from 'path'
 
-import { unmock } from '@tests/utils'
-import stackTrace from '@tests/mocks/stackTrace'
-import readAsync from '@tests/mocks/readAsync'
+import mockedStackTrace from '@tests/mocks/stackTrace'
+import mockedReadAsync from '@tests/mocks/readAsync'
+import unmockStackTrace from '@tests/unmocks/stackTrace'
+import unmockReadAsync from '@tests/unmocks/readAsync'
 
 import index from '.'
 
@@ -12,10 +13,10 @@ jest.mock('@mnrendra/stack-trace', () => ({
 
 jest.mock('./read')
 
-describe('Test `index` async.', () => {
-  describe('By mocking `initPath` to reject with an error.', () => {
+describe('Test `index` async:', () => {
+  describe('By mocking `initPath` to reject with an error:', () => {
     beforeAll(() => {
-      stackTrace.mockReturnValue([
+      mockedStackTrace.mockReturnValue([
         { getFileName: () => undefined },
         { getFileName: () => null },
         { getFileName: () => '' }
@@ -23,8 +24,7 @@ describe('Test `index` async.', () => {
     })
 
     afterAll(() => {
-      const originalModule = jest.requireActual('@mnrendra/stack-trace')
-      stackTrace.mockImplementation(originalModule.stackTrace)
+      unmockStackTrace(mockedStackTrace)
     })
 
     it('Should reject with an error when unable to obtain the initial path!', async () => {
@@ -35,16 +35,16 @@ describe('Test `index` async.', () => {
     })
   })
 
-  describe('By mocking `read` async to resolve an empty JSON string.', () => {
+  describe('By mocking `read` async to resolve an empty JSON string:', () => {
     beforeAll(() => {
-      readAsync.mockResolvedValue('{}')
+      mockedReadAsync.mockResolvedValue('{}')
     })
 
     afterAll(() => {
-      unmock(readAsync, join(__dirname, 'read'))
+      unmockReadAsync(mockedReadAsync, join(__dirname, 'read'))
     })
 
-    it('Should resolve the file data when able to obtain the file!', async () => {
+    it('Should resolve the file data as a `string` when able to obtain the file!', async () => {
       const received = await index('package.json')
       const expected = '{}'
 
@@ -52,13 +52,13 @@ describe('Test `index` async.', () => {
     })
   })
 
-  describe('By mocking `read` async to resolve a non-JSON string.', () => {
+  describe('By mocking `read` async to resolve a non-JSON string:', () => {
     beforeAll(() => {
-      readAsync.mockResolvedValue('')
+      mockedReadAsync.mockResolvedValue('')
     })
 
     afterAll(() => {
-      unmock(readAsync, join(__dirname, 'read'))
+      unmockReadAsync(mockedReadAsync, join(__dirname, 'read'))
     })
 
     it('Should reject with an error when unable to obtain the file!', async () => {
@@ -69,7 +69,7 @@ describe('Test `index` async.', () => {
     })
   })
 
-  describe('Without mocking anything.', () => {
+  describe('Without mocking anything:', () => {
     it('Should resolve the file data when able to obtain the file!', async () => {
       const received = await index('package.json')
       const expected = expect.any(String)

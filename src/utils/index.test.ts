@@ -1,7 +1,8 @@
 import { basename, dirname, resolve } from 'path'
 
-import stackTrace from '@tests/mocks/stackTrace'
-import { validSkippedStacks } from '@tests/stubs'
+import mockedStackTrace from '@tests/mocks/stackTrace'
+import unmockStackTrace from '@tests/unmocks/stackTrace'
+import validSkippedStacks from '@tests/stubs/validSkippedStacks'
 
 import { initPath, movePath, validateSkippedStacks } from '.'
 
@@ -9,11 +10,11 @@ jest.mock('@mnrendra/stack-trace', () => ({
   stackTrace: jest.fn()
 }))
 
-describe('Test `index` utils.', () => {
-  describe('Test `initPath` util.', () => {
-    describe('By mocking `stackTrace` to return mocked `getFileName` with positive conditions.', () => {
+describe('Test `index` utils:', () => {
+  describe('Test `initPath` util:', () => {
+    describe('By mocking `stackTrace` to return mocked `getFileName` with positive conditions:', () => {
       beforeAll(() => {
-        stackTrace.mockReturnValue([
+        mockedStackTrace.mockReturnValue([
           { getFileName: () => undefined },
           { getFileName: () => null },
           { getFileName: () => '' },
@@ -22,8 +23,7 @@ describe('Test `index` utils.', () => {
       })
 
       afterAll(() => {
-        const originalModule = jest.requireActual('@mnrendra/stack-trace')
-        stackTrace.mockImplementation(originalModule.stackTrace)
+        unmockStackTrace(mockedStackTrace)
       })
 
       it('Should return the current directory path!', () => {
@@ -34,9 +34,9 @@ describe('Test `index` utils.', () => {
       })
     })
 
-    describe('By mocking `stackTrace` to return mocked `getFileName` with negative conditions.', () => {
+    describe('By mocking `stackTrace` to return mocked `getFileName` with negative conditions:', () => {
       beforeAll(() => {
-        stackTrace.mockReturnValue([
+        mockedStackTrace.mockReturnValue([
           { getFileName: () => undefined },
           { getFileName: () => null },
           { getFileName: () => '' }
@@ -44,8 +44,7 @@ describe('Test `index` utils.', () => {
       })
 
       afterAll(() => {
-        const originalModule = jest.requireActual('@mnrendra/stack-trace')
-        stackTrace.mockImplementation(originalModule.stackTrace)
+        unmockStackTrace(mockedStackTrace)
       })
 
       it('Should throw an error when unable to obtain the initial path!', () => {
@@ -56,7 +55,7 @@ describe('Test `index` utils.', () => {
       })
     })
 
-    describe('Without mocking anything.', () => {
+    describe('Without mocking anything:', () => {
       it('Should return the current directory path!', () => {
         const received = initPath('any.file')
         const expected = expect.any(String)
@@ -80,7 +79,7 @@ describe('Test `index` utils.', () => {
     })
   })
 
-  describe('Test `movePath` util.', () => {
+  describe('Test `movePath` util:', () => {
     it('Should return the file path in the parent directory!', () => {
       const base = basename(__filename)
       const dir = dirname(__filename)
@@ -92,7 +91,7 @@ describe('Test `index` utils.', () => {
     })
   })
 
-  describe('Test `validateSkippedStacks` util.', () => {
+  describe('Test `validateSkippedStacks` util:', () => {
     it('Should return the default value when given an empty argument!', () => {
       const received = validateSkippedStacks()
       const expected = validSkippedStacks()
