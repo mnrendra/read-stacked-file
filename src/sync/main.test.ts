@@ -1,8 +1,9 @@
 import { join } from 'path'
 
-import { unmock } from '@tests/utils'
-import stackTrace from '@tests/mocks/stackTrace'
-import readSync from '@tests/mocks/readSync'
+import mockedStackTrace from '@tests/mocks/stackTrace'
+import mockedReadSync from '@tests/mocks/readSync'
+import unmockStackTrace from '@tests/unmocks/stackTrace'
+import unmockReadSync from '@tests/unmocks/readSync'
 
 import main from './main'
 
@@ -12,10 +13,10 @@ jest.mock('@mnrendra/stack-trace', () => ({
 
 jest.mock('./read')
 
-describe('Test `main` sync.', () => {
-  describe('By mocking `initPath` to throw an error.', () => {
+describe('Test `main` sync:', () => {
+  describe('By mocking `initPath` to throw an error:', () => {
     beforeAll(() => {
-      stackTrace.mockReturnValue([
+      mockedStackTrace.mockReturnValue([
         { getFileName: () => undefined },
         { getFileName: () => null },
         { getFileName: () => '' }
@@ -23,8 +24,7 @@ describe('Test `main` sync.', () => {
     })
 
     afterAll(() => {
-      const originalModule = jest.requireActual('@mnrendra/stack-trace')
-      stackTrace.mockImplementation(originalModule.stackTrace)
+      unmockStackTrace(mockedStackTrace)
     })
 
     it('Should throw an error when unable to obtain the initial path!', () => {
@@ -35,13 +35,13 @@ describe('Test `main` sync.', () => {
     })
   })
 
-  describe('By mocking `read` sync to return an empty JSON string.', () => {
+  describe('By mocking `read` sync to return an empty JSON string:', () => {
     beforeAll(() => {
-      readSync.mockReturnValue('{}')
+      mockedReadSync.mockReturnValue('{}')
     })
 
     afterAll(() => {
-      unmock(readSync, join(__dirname, 'read'))
+      unmockReadSync(mockedReadSync, join(__dirname, 'read'))
     })
 
     it('Should return the file data as a `string` when able to obtain the file!', () => {
@@ -52,13 +52,13 @@ describe('Test `main` sync.', () => {
     })
   })
 
-  describe('By mocking `read` sync to return a non-JSON string.', () => {
+  describe('By mocking `read` sync to return a non-JSON string:', () => {
     beforeAll(() => {
-      readSync.mockReturnValue('')
+      mockedReadSync.mockReturnValue('')
     })
 
     afterAll(() => {
-      unmock(readSync, join(__dirname, 'read'))
+      unmockReadSync(mockedReadSync, join(__dirname, 'read'))
     })
 
     it('Should throw an error when unable to obtain the file!', () => {
@@ -69,7 +69,7 @@ describe('Test `main` sync.', () => {
     })
   })
 
-  describe('Without mocking anything.', () => {
+  describe('Without mocking anything:', () => {
     it('Should return the file data when able to obtain the file!', () => {
       const received = main('package.json')
       const expected = expect.any(String)

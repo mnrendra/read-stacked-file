@@ -1,9 +1,9 @@
-import * as readAsync from './readAsync'
-import * as readSync from './readSync'
-import * as stackTrace from './stackTrace'
+import mockedReadAsync from './readAsync'
+import mockedReadSync from './readSync'
+import mockedStackTrace from './stackTrace'
 
 export {
-  readAsync,
-  readSync,
-  stackTrace
+  mockedReadAsync,
+  mockedReadSync,
+  mockedStackTrace
 }

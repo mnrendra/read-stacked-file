@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 
-import stackTrace from '@tests/mocks/stackTrace'
+import mockedStackTrace from '@tests/mocks/stackTrace'
+import unmockStackTrace from '@tests/unmocks/stackTrace'
 
 import initPath from './initPath'
 
@@ -8,10 +9,10 @@ jest.mock('@mnrendra/stack-trace', () => ({
   stackTrace: jest.fn()
 }))
 
-describe('Test `initPath` util.', () => {
-  describe('By mocking `stackTrace` to return mocked `getFileName` with positive conditions.', () => {
+describe('Test `initPath` util:', () => {
+  describe('By mocking `stackTrace` to return mocked `getFileName` with positive conditions:', () => {
     beforeAll(() => {
-      stackTrace.mockReturnValue([
+      mockedStackTrace.mockReturnValue([
         { getFileName: () => undefined },
         { getFileName: () => null },
         { getFileName: () => '' },
@@ -20,8 +21,7 @@ describe('Test `initPath` util.', () => {
     })
 
     afterAll(() => {
-      const originalModule = jest.requireActual('@mnrendra/stack-trace')
-      stackTrace.mockImplementation(originalModule.stackTrace)
+      unmockStackTrace(mockedStackTrace)
     })
 
     it('Should return the current directory path!', () => {
@@ -32,9 +32,9 @@ describe('Test `initPath` util.', () => {
     })
   })
 
-  describe('By mocking `stackTrace` to return mocked `getFileName` with negative conditions.', () => {
+  describe('By mocking `stackTrace` to return mocked `getFileName` with negative conditions:', () => {
     beforeAll(() => {
-      stackTrace.mockReturnValue([
+      mockedStackTrace.mockReturnValue([
         { getFileName: () => undefined },
         { getFileName: () => null },
         { getFileName: () => '' }
@@ -42,8 +42,7 @@ describe('Test `initPath` util.', () => {
     })
 
     afterAll(() => {
-      const originalModule = jest.requireActual('@mnrendra/stack-trace')
-      stackTrace.mockImplementation(originalModule.stackTrace)
+      unmockStackTrace(mockedStackTrace)
     })
 
     it('Should throw an error when unable to obtain the initial path!', () => {
@@ -54,7 +53,7 @@ describe('Test `initPath` util.', () => {
     })
   })
 
-  describe('Without mocking anything.', () => {
+  describe('Without mocking anything:', () => {
     it('Should return the current directory path!', () => {
       const received = initPath('any.file')
       const expected = expect.any(String)
