@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/mnrendra/read-stacked-file#readme",
   "dependencies": {
-    "@mnrendra/stack-trace": "^1.0.0"
+    "@mnrendra/stack-trace": "^1.1.0"
   },
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",
