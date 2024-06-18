@@ -1,4 +1,5 @@
 import type stackTrace from '@mnrendra/stack-trace'
+
 import type mockedStackTrace from '@tests/mocks/stackTrace'
 
 type StackTrace = typeof stackTrace

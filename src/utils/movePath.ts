@@ -2,8 +2,10 @@ import { basename, dirname, resolve } from 'path'
 
 /**
  * Move path.
+ *
  * @param {string} path - Path to be moved.
  * @param {string} aim - Aimed directory.
+ *
  * @returns {string} Moved path.
  */
 const movePath = (

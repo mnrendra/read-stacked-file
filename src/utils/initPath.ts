@@ -1,19 +1,20 @@
-import type { SkippedStacks } from '../types'
+import type { SkippedStacks } from '@mnrendra/validate-skipped-stacks'
 
 import { dirname, resolve } from 'path'
 
 import { stackTrace } from '@mnrendra/stack-trace'
+import validateSkippedStacks from '@mnrendra/validate-skipped-stacks'
 
 import { SKIPPED_STACK } from '../consts'
 
-import validateSkippedStacks from './validateSkippedStacks'
-
 /**
  * Initialize path.
+ *
  * @param {string} basename - Base name (file name) to be resolved with the
  * initialize path.
  * @param {string|string[]} [skippedStacks] - Stack paths to be skipped
  * (optional).
+ *
  * @returns {string} Initialized path.
  */
 const initPath = (
@@ -24,18 +25,26 @@ const initPath = (
   const stacks = stackTrace()
 
   // Map stack trace paths.
-  const paths = stacks.map((stack) => stack.getFileName() || SKIPPED_STACK)
+  const paths = stacks.map((stack) =>
+    typeof stack.getFileName() === 'string' && stack.getFileName() !== ''
+      ? stack.getFileName()
+      : SKIPPED_STACK
+  )
 
   // Validate skipped stacks.
-  const validSkippedStacks = validateSkippedStacks(skippedStacks)
+  const validSkippedStacks = validateSkippedStacks(SKIPPED_STACK, skippedStacks)
 
   // Find the initial path.
   const path = paths.find((path) => !(
-    validSkippedStacks.some((skippedStack) => path.includes(skippedStack))
+    validSkippedStacks.some((skippedStack) =>
+      typeof path === 'string' && path !== '' && path.includes(skippedStack)
+    )
   ))
 
   // Throw an error if the path is undefined.
-  if (typeof path !== 'string') throw new Error('Unable to obtain the initial path!')
+  if (typeof path !== 'string' || path === '') {
+    throw new Error('Unable to obtain the initial path!')
+  }
 
   // Get the directory name.
   const dir = dirname(path)

@@ -8,8 +8,10 @@ import read from './read'
 
 /**
  * Read obtained file asynchronously.
+ *
  * @param {string} targetFile - Targeted file to be obtained.
  * @param {object} [options] - Optional params.
+ *
  * @returns {Promise<string>} Obtained value.
  */
 const main = async (
@@ -27,7 +29,7 @@ const main = async (
   let data = await read(path)
 
   // Looping when data is `undefined`.
-  while (!data) {
+  while (typeof data !== 'string' || data === '') {
     // Move to the next path.
     path = movePath(path, '..')
 
@@ -35,7 +37,10 @@ const main = async (
     data = await read(path)
 
     // Stop looping when unable to obtain the file data.
-    if (path === resolve('/', targetFile) && !data) {
+    if (
+      path === resolve('/', targetFile) &&
+      (typeof data !== 'string' || data === '')
+    ) {
       throw new Error('Unable to obtain the file data!')
     }
   }

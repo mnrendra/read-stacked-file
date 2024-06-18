@@ -2,7 +2,9 @@ import { readFile } from 'fs'
 
 /**
  * Read file asynchronously.
+ *
  * @param {string} path - File path.
+ *
  * @returns {Promise<string|undefined>} File data in a promise.
  */
 const read = async (
