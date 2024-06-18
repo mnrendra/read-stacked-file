@@ -8,8 +8,10 @@ import read from './read'
 
 /**
  * Read obtained file synchronously.
+ *
  * @param {string} targetedFile - Targeted file to be obtained.
  * @param {object} [options] - Optional params.
+ *
  * @returns {string} Obtained value.
  */
 const main = (
@@ -27,7 +29,7 @@ const main = (
   let data = read(path)
 
   // Looping when data is `undefined`.
-  while (!data) {
+  while (typeof data !== 'string' || data === '') {
     // Move to the next path.
     path = movePath(path, '..')
 
@@ -35,7 +37,10 @@ const main = (
     data = read(path)
 
     // Stop looping when unable to obtain the file data.
-    if (path === resolve('/', targetedFile) && !data) {
+    if (
+      path === resolve('/', targetedFile) &&
+      (typeof data !== 'string' || data === '')
+    ) {
       throw new Error('Unable to obtain the file data!')
     }
   }
