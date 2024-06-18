@@ -6,9 +6,8 @@ import mockedReadSync from '@tests/mocks/readSync'
 import unmockStackTrace from '@tests/unmocks/stackTrace'
 import unmockReadAsync from '@tests/unmocks/readAsync'
 import unmockReadSync from '@tests/unmocks/readSync'
-import validSkippedStacks from '@tests/stubs/validSkippedStacks'
 
-import { validateSkippedStacks, movePath, initPath } from './utils'
+import { movePath, initPath } from './utils'
 
 import { read, readSync } from '.'
 
@@ -98,29 +97,6 @@ describe('Test `index` utils:', () => {
       const expected = resolve(resolve(dir, '..'), base)
 
       expect(received).toBe(expected)
-    })
-  })
-
-  describe('Test `validateSkippedStacks` util:', () => {
-    it('Should return the default value when given an empty argument!', () => {
-      const received = validateSkippedStacks()
-      const expected = validSkippedStacks()
-
-      expect(received).toEqual(expected)
-    })
-
-    it('Should return the default value with additional `skippedStacks` when given a `skippedStacks` option with a string!', () => {
-      const received = validateSkippedStacks('any')
-      const expected = [...validSkippedStacks(), 'any']
-
-      expect(received).toEqual(expected)
-    })
-
-    it('Should return the default value with additional `skippedStacks` when given a `skippedStacks` option with a list of strings!', () => {
-      const received = validateSkippedStacks(['any'])
-      const expected = [...validSkippedStacks(), 'any']
-
-      expect(received).toEqual(expected)
     })
   })
 })

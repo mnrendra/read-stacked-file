@@ -1,4 +1,6 @@
-import type { Options, SkippedStacks } from './types'
+import type { SkippedStacks } from '@mnrendra/validate-skipped-stacks'
+
+import type { Options } from './types'
 
 import mainAsync from './async'
 import mainSync from './sync'

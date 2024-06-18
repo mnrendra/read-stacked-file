@@ -2,7 +2,9 @@ import { readFileSync } from 'fs'
 
 /**
  * Read file synchronously.
+ *
  * @param {string} path - File path.
+ *
  * @returns {string|undefined} File data.
  */
 const read = (

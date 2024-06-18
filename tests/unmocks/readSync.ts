@@ -1,4 +1,5 @@
 import type read from '../../src/sync/read'
+
 import type mockedReadSync from '@tests/mocks/readSync'
 
 type Read = typeof read
