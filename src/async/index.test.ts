@@ -27,32 +27,15 @@ describe('Test `index` async:', () => {
       unmockStackTrace(mockedStackTrace)
     })
 
-    it('Should reject with an error when unable to obtain the initial path!', async () => {
-      const received = index('package.json')
-      const expected = Error('Unable to obtain the initial path!')
+    it('Should reject with an error when unable to locate the initial path!', async () => {
+      const received = index('any.file')
+      const expected = Error('Unable to locate the initial path of "any.file".')
 
       await expect(received).rejects.toThrow(expected)
     })
   })
 
-  describe('By mocking `read` async to resolve an empty JSON string:', () => {
-    beforeAll(() => {
-      mockedReadAsync.mockResolvedValue('{}')
-    })
-
-    afterAll(() => {
-      unmockReadAsync(mockedReadAsync, join(__dirname, 'read'))
-    })
-
-    it('Should resolve the file data as a `string` when able to obtain the file!', async () => {
-      const received = await index('package.json')
-      const expected = '{}'
-
-      expect(received).toBe(expected)
-    })
-  })
-
-  describe('By mocking `read` async to resolve a non-JSON string:', () => {
+  describe('By mocking `read` async to resolve a string value:', () => {
     beforeAll(() => {
       mockedReadAsync.mockResolvedValue('')
     })
@@ -61,9 +44,26 @@ describe('Test `index` async:', () => {
       unmockReadAsync(mockedReadAsync, join(__dirname, 'read'))
     })
 
+    it('Should resolve the file data as a `string` when able to obtain the file!', async () => {
+      const received = await index('any.file')
+      const expected = ''
+
+      expect(received).toBe(expected)
+    })
+  })
+
+  describe('By mocking `read` async to resolve a non-string value:', () => {
+    beforeAll(() => {
+      mockedReadAsync.mockResolvedValue(null)
+    })
+
+    afterAll(() => {
+      unmockReadAsync(mockedReadAsync, join(__dirname, 'read'))
+    })
+
     it('Should reject with an error when unable to obtain the file!', async () => {
-      const received = index('package.json')
-      const expected = Error('Unable to obtain the file data!')
+      const received = index('any.file')
+      const expected = Error('Unable to find the "any.file" file.')
 
       await expect(received).rejects.toThrow(expected)
     })
