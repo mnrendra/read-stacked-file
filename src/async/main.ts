@@ -1,6 +1,6 @@
 import type { Options } from '../types'
 
-import { resolve } from 'path'
+import { basename, resolve } from 'path'
 
 import { initPath, movePath } from '../utils'
 
@@ -9,13 +9,13 @@ import read from './read'
 /**
  * Read obtained file asynchronously.
  *
- * @param {string} targetFile - Targeted file to be obtained.
+ * @param {string} targetedFile - Targeted file to be obtained.
  * @param {object} [options] - Optional params.
  *
  * @returns {Promise<string>} Obtained value.
  */
 const main = async (
-  targetFile: string,
+  targetedFile: string,
   {
     skippedStacks
   }: Options = {
@@ -23,13 +23,13 @@ const main = async (
   }
 ): Promise<string> => {
   // Initialize path.
-  let path = initPath(targetFile, skippedStacks)
+  let path = initPath(targetedFile, skippedStacks)
 
   // Read initial path.
   let data = await read(path)
 
   // Looping when data is `undefined`.
-  while (typeof data !== 'string' || data === '') {
+  while (typeof data !== 'string') {
     // Move to the next path.
     path = movePath(path, '..')
 
@@ -37,11 +37,8 @@ const main = async (
     data = await read(path)
 
     // Stop looping when unable to obtain the file data.
-    if (
-      path === resolve('/', targetFile) &&
-      (typeof data !== 'string' || data === '')
-    ) {
-      throw new Error('Unable to obtain the file data!')
+    if (path === resolve('/', targetedFile) && typeof data !== 'string') {
+      throw new Error(`Unable to find the "${basename(targetedFile)}" file.`)
     }
   }
 

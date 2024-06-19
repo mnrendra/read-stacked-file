@@ -27,32 +27,15 @@ describe('Test `index` sync:', () => {
       unmockStackTrace(mockedStackTrace)
     })
 
-    it('Should throw an error when unable to obtain the initial path!', () => {
-      const received = (): void => { index('package.json') }
-      const expected = Error('Unable to obtain the initial path!')
+    it('Should throw an error when unable to locate the initial path!', () => {
+      const received = (): void => { index('any.file') }
+      const expected = Error('Unable to locate the initial path of "any.file".')
 
       expect(received).toThrow(expected)
     })
   })
 
-  describe('By mocking `read` sync to return an empty JSON string:', () => {
-    beforeAll(() => {
-      mockedReadSync.mockReturnValue('{}')
-    })
-
-    afterAll(() => {
-      unmockReadSync(mockedReadSync, join(__dirname, 'read'))
-    })
-
-    it('Should return the file data as a `string` when able to obtain the file!', () => {
-      const received = index('package.json')
-      const expected = '{}'
-
-      expect(received).toBe(expected)
-    })
-  })
-
-  describe('By mocking `read` sync to return a non-JSON string:', () => {
+  describe('By mocking `read` sync to return a string value:', () => {
     beforeAll(() => {
       mockedReadSync.mockReturnValue('')
     })
@@ -61,9 +44,26 @@ describe('Test `index` sync:', () => {
       unmockReadSync(mockedReadSync, join(__dirname, 'read'))
     })
 
+    it('Should return the file data as a `string` when able to obtain the file!', () => {
+      const received = index('any.file')
+      const expected = ''
+
+      expect(received).toBe(expected)
+    })
+  })
+
+  describe('By mocking `read` sync to return a non-string value:', () => {
+    beforeAll(() => {
+      mockedReadSync.mockReturnValue(null)
+    })
+
+    afterAll(() => {
+      unmockReadSync(mockedReadSync, join(__dirname, 'read'))
+    })
+
     it('Should throw an error when unable to obtain the file!', () => {
-      const received = (): void => { index('package.json') }
-      const expected = Error('Unable to obtain the file data!')
+      const received = (): void => { index('any.file') }
+      const expected = Error('Unable to find the "any.file" file.')
 
       expect(received).toThrow(expected)
     })

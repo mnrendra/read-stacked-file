@@ -56,9 +56,9 @@ describe('Test `index` utils:', () => {
         unmockStackTrace(mockedStackTrace)
       })
 
-      it('Should throw an error when unable to obtain the initial path!', () => {
+      it('Should throw an error when unable to locate the initial path!', () => {
         const received = (): void => { initPath('any.file') }
-        const expected = Error('Unable to obtain the initial path!')
+        const expected = Error('Unable to locate the initial path of "any.file".')
 
         expect(received).toThrow(expected)
       })
@@ -116,32 +116,15 @@ describe('Test all features:', () => {
         unmockStackTrace(mockedStackTrace)
       })
 
-      it('Should reject with an error when unable to obtain the initial path!', async () => {
-        const received = read('package.json')
-        const expected = Error('Unable to obtain the initial path!')
+      it('Should reject with an error when unable to locate the initial path!', async () => {
+        const received = read('any.file')
+        const expected = Error('Unable to locate the initial path of "any.file".')
 
         await expect(received).rejects.toThrow(expected)
       })
     })
 
-    describe('By mocking `read` async to resolve an empty JSON string:', () => {
-      beforeAll(() => {
-        mockedReadAsync.mockResolvedValue('{}')
-      })
-
-      afterAll(() => {
-        unmockReadAsync(mockedReadAsync, join(__dirname, 'async/read'))
-      })
-
-      it('Should resolve the file data as a `string` when able to obtain the file!', async () => {
-        const received = await read('package.json')
-        const expected = '{}'
-
-        expect(received).toBe(expected)
-      })
-    })
-
-    describe('By mocking `read` async to resolve a non-JSON string:', () => {
+    describe('By mocking `read` async to resolve a string value:', () => {
       beforeAll(() => {
         mockedReadAsync.mockResolvedValue('')
       })
@@ -150,9 +133,26 @@ describe('Test all features:', () => {
         unmockReadAsync(mockedReadAsync, join(__dirname, 'async/read'))
       })
 
+      it('Should resolve the file data as a `string` when able to obtain the file!', async () => {
+        const received = await read('any.file')
+        const expected = ''
+
+        expect(received).toBe(expected)
+      })
+    })
+
+    describe('By mocking `read` async to resolve a non-string value:', () => {
+      beforeAll(() => {
+        mockedReadAsync.mockResolvedValue(null)
+      })
+
+      afterAll(() => {
+        unmockReadAsync(mockedReadAsync, join(__dirname, 'async/read'))
+      })
+
       it('Should reject with an error when unable to obtain the file!', async () => {
-        const received = read('package.json')
-        const expected = Error('Unable to obtain the file data!')
+        const received = read('any.file')
+        const expected = Error('Unable to find the "any.file" file.')
 
         await expect(received).rejects.toThrow(expected)
       })
@@ -196,32 +196,15 @@ describe('Test all features:', () => {
         unmockStackTrace(mockedStackTrace)
       })
 
-      it('Should throw an error when unable to obtain the initial path!', () => {
-        const received = (): void => { readSync('package.json') }
-        const expected = Error('Unable to obtain the initial path!')
+      it('Should throw an error when unable to locate the initial path!', () => {
+        const received = (): void => { readSync('any.file') }
+        const expected = Error('Unable to locate the initial path of "any.file".')
 
         expect(received).toThrow(expected)
       })
     })
 
-    describe('By mocking `read` sync to return an empty JSON string:', () => {
-      beforeAll(() => {
-        mockedReadSync.mockReturnValue('{}')
-      })
-
-      afterAll(() => {
-        unmockReadSync(mockedReadSync, join(__dirname, 'sync/read'))
-      })
-
-      it('Should return the file data as a `string` when able to obtain the file!', () => {
-        const received = readSync('package.json')
-        const expected = '{}'
-
-        expect(received).toBe(expected)
-      })
-    })
-
-    describe('By mocking `read` sync to return a non-JSON string:', () => {
+    describe('By mocking `read` sync to return a string value:', () => {
       beforeAll(() => {
         mockedReadSync.mockReturnValue('')
       })
@@ -230,9 +213,26 @@ describe('Test all features:', () => {
         unmockReadSync(mockedReadSync, join(__dirname, 'sync/read'))
       })
 
+      it('Should return the file data as a `string` when able to obtain the file!', () => {
+        const received = readSync('any.file')
+        const expected = ''
+
+        expect(received).toBe(expected)
+      })
+    })
+
+    describe('By mocking `read` sync to return a non-string value:', () => {
+      beforeAll(() => {
+        mockedReadSync.mockReturnValue(null)
+      })
+
+      afterAll(() => {
+        unmockReadSync(mockedReadSync, join(__dirname, 'sync/read'))
+      })
+
       it('Should throw an error when unable to obtain the file!', () => {
-        const received = (): void => { readSync('package.json') }
-        const expected = Error('Unable to obtain the file data!')
+        const received = (): void => { readSync('any.file') }
+        const expected = Error('Unable to find the "any.file" file.')
 
         expect(received).toThrow(expected)
       })
