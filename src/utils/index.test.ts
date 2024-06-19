@@ -46,9 +46,9 @@ describe('Test `index` utils:', () => {
         unmockStackTrace(mockedStackTrace)
       })
 
-      it('Should throw an error when unable to obtain the initial path!', () => {
+      it('Should throw an error when unable to locate the initial path!', () => {
         const received = (): void => { initPath('any.file') }
-        const expected = Error('Unable to obtain the initial path!')
+        const expected = Error('Unable to locate the initial path of "any.file".')
 
         expect(received).toThrow(expected)
       })

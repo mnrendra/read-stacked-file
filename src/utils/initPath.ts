@@ -43,7 +43,7 @@ const initPath = (
 
   // Throw an error if the path is undefined.
   if (typeof path !== 'string' || path === '') {
-    throw new Error('Unable to obtain the initial path!')
+    throw new Error(`Unable to locate the initial path of "${basename}".`)
   }
 
   // Get the directory name.

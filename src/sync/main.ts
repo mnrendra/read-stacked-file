@@ -1,6 +1,6 @@
 import type { Options } from '../types'
 
-import { resolve } from 'path'
+import { basename, resolve } from 'path'
 
 import { initPath, movePath } from '../utils'
 
@@ -29,7 +29,7 @@ const main = (
   let data = read(path)
 
   // Looping when data is `undefined`.
-  while (typeof data !== 'string' || data === '') {
+  while (typeof data !== 'string') {
     // Move to the next path.
     path = movePath(path, '..')
 
@@ -37,11 +37,8 @@ const main = (
     data = read(path)
 
     // Stop looping when unable to obtain the file data.
-    if (
-      path === resolve('/', targetedFile) &&
-      (typeof data !== 'string' || data === '')
-    ) {
-      throw new Error('Unable to obtain the file data!')
+    if (path === resolve('/', targetedFile) && typeof data !== 'string') {
+      throw new Error(`Unable to find the "${basename(targetedFile)}" file.`)
     }
   }
 
