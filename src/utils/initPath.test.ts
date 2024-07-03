@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 import mockedStackTrace from '@tests/mocks/stackTrace'
 import unmockStackTrace from '@tests/unmocks/stackTrace'

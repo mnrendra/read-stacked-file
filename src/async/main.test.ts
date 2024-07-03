@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 
 import mockedStackTrace from '@tests/mocks/stackTrace'
 import mockedReadAsync from '@tests/mocks/readAsync'

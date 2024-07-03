@@ -1,4 +1,4 @@
-import { join, dirname, basename, resolve } from 'path'
+import { join, dirname, basename, resolve } from 'node:path'
 
 import mockedStackTrace from '@tests/mocks/stackTrace'
 import mockedReadAsync from '@tests/mocks/readAsync'
