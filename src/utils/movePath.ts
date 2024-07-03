@@ -1,4 +1,4 @@
-import { basename, dirname, resolve } from 'path'
+import { basename, dirname, resolve } from 'node:path'
 
 /**
  * Move path.

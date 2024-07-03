@@ -1,6 +1,6 @@
 import type { SkippedStacks } from '@mnrendra/validate-skipped-stacks'
 
-import { dirname, resolve } from 'path'
+import { dirname, resolve } from 'node:path'
 
 import { stackTrace } from '@mnrendra/stack-trace'
 import validateSkippedStacks from '@mnrendra/validate-skipped-stacks'
