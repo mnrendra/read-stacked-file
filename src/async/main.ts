@@ -1,6 +1,6 @@
 import type { Options } from '../types'
 
-import { basename, resolve } from 'path'
+import { basename, resolve } from 'node:path'
 
 import { initPath, movePath } from '../utils'
 

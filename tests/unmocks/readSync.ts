@@ -1,6 +1,6 @@
 import type read from '../../src/sync/read'
 
-import type mockedReadSync from '@tests/mocks/readSync'
+import type { mockedReadSync } from '@tests/mocks'
 
 type Read = typeof read
 type MockedReadSync = typeof mockedReadSync

@@ -1,6 +1,6 @@
 import type stackTrace from '@mnrendra/stack-trace'
 
-import type mockedStackTrace from '@tests/mocks/stackTrace'
+import type { mockedStackTrace } from '@tests/mocks'
 
 type StackTrace = typeof stackTrace
 type MockedStackTrace = typeof mockedStackTrace
