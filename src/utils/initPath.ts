@@ -1,4 +1,4 @@
-import type { SkippedStacks } from '@mnrendra/validate-skipped-stacks'
+import type { SkippedStacks } from '../types'
 
 import { dirname, resolve } from 'node:path'
 
@@ -14,15 +14,18 @@ import { SKIPPED_STACK } from '../consts'
  * initialize path.
  * @param {string|string[]} [skippedStacks] - Stack paths to be skipped
  * (optional).
+ * @param {number} [limit] - The number of stack frames collected by a stack
+ * trace (optional).
  *
  * @returns {string} Initialized path.
  */
 const initPath = (
   basename: string,
-  skippedStacks: SkippedStacks = []
+  skippedStacks: SkippedStacks = [],
+  limit: number = 10
 ): string => {
   // Trace stacks.
-  const stacks = stackTrace()
+  const stacks = stackTrace(undefined, { limit })
 
   // Map stack trace paths.
   const paths = stacks.map((stack) =>

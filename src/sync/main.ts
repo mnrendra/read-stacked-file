@@ -10,20 +10,22 @@ import read from './read'
  * Read obtained file synchronously.
  *
  * @param {string} targetedFile - Targeted file to be obtained.
- * @param {object} [options] - Optional params.
+ * @param {Options} [options] - Optional params.
  *
  * @returns {string} Obtained value.
  */
 const main = (
   targetedFile: string,
   {
-    skippedStacks
+    skippedStacks,
+    stackTraceLimit
   }: Options = {
-    skippedStacks: []
+    skippedStacks: [],
+    stackTraceLimit: 10
   }
 ): string => {
   // Initialize path.
-  let path = initPath(targetedFile, skippedStacks)
+  let path = initPath(targetedFile, skippedStacks, stackTraceLimit)
 
   // Read initial path.
   let data = read(path)

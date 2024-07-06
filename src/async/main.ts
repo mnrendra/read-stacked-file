@@ -10,20 +10,22 @@ import read from './read'
  * Read obtained file asynchronously.
  *
  * @param {string} targetedFile - Targeted file to be obtained.
- * @param {object} [options] - Optional params.
+ * @param {Options} [options] - Optional params.
  *
  * @returns {Promise<string>} Obtained value.
  */
 const main = async (
   targetedFile: string,
   {
-    skippedStacks
+    skippedStacks,
+    stackTraceLimit
   }: Options = {
-    skippedStacks: []
+    skippedStacks: [],
+    stackTraceLimit: 10
   }
 ): Promise<string> => {
   // Initialize path.
-  let path = initPath(targetedFile, skippedStacks)
+  let path = initPath(targetedFile, skippedStacks, stackTraceLimit)
 
   // Read initial path.
   let data = await read(path)
