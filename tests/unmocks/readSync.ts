@@ -1,20 +1,20 @@
-import type read from '../../src/sync/read'
+import type originalModule from '@/sync/read'
 
-import type mockedReadSync from '@tests/mocks/readSync'
+import type mockedModule from '@tests/mocks/readSync'
 
-type Read = typeof read
-type MockedReadSync = typeof mockedReadSync
+type OriginalModule = typeof originalModule
+type MockedModule = typeof mockedModule
 
-interface ReadSync extends Read {
+interface ActualModule extends OriginalModule {
   default: ((...args: any) => any) | undefined
 }
 
-const unmockReadSync = (
-  mockedReadSync: MockedReadSync,
-  readPath: string
+const unmock = (
+  mockedModule: MockedModule,
+  moduleName: string
 ): void => {
-  const readSync: ReadSync = jest.requireActual(readPath)
-  mockedReadSync.mockImplementation(readSync.default)
+  const actualModule: ActualModule = jest.requireActual(moduleName)
+  mockedModule.mockImplementation(actualModule.default)
 }
 
-export default unmockReadSync
+export default unmock
