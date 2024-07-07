@@ -1,15 +1,15 @@
-import type stackTrace from '@mnrendra/stack-trace'
+import type originalModule from '@mnrendra/stack-trace'
 
-import type mockedStackTrace from '@tests/mocks/stackTrace'
+import type mockedModule from '@tests/mocks/stackTrace'
 
-type StackTrace = typeof stackTrace
-type MockedStackTrace = typeof mockedStackTrace
+type OriginalModule = typeof originalModule
+type MockedModule = typeof mockedModule
 
-const unmockStackTrace = (
-  mockedStackTrace: MockedStackTrace
+const unmock = (
+  mockedModule: MockedModule
 ): void => {
-  const { stackTrace }: StackTrace = jest.requireActual('@mnrendra/stack-trace')
-  mockedStackTrace.mockImplementation(stackTrace)
+  const actualModule: OriginalModule = jest.requireActual('@mnrendra/stack-trace')
+  mockedModule.mockImplementation(actualModule.stackTrace)
 }
 
-export default unmockStackTrace
+export default unmock
