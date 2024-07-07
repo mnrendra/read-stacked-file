@@ -7,7 +7,7 @@ import unmockStackTrace from '@tests/unmocks/stackTrace'
 import unmockReadAsync from '@tests/unmocks/readAsync'
 import unmockReadSync from '@tests/unmocks/readSync'
 
-import { movePath, initPath } from './utils'
+import { movePath, initPath } from '@/utils'
 
 import { read, readSync } from '.'
 

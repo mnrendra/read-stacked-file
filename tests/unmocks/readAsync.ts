@@ -1,20 +1,20 @@
-import type read from '../../src/async/read'
+import type originalModule from '@/async/read'
 
-import type mockedReadAsync from '@tests/mocks/readAsync'
+import type mockedModule from '@tests/mocks/readAsync'
 
-type Read = typeof read
-type MockedReadAsync = typeof mockedReadAsync
+type OriginalModule = typeof originalModule
+type MockedModule = typeof mockedModule
 
-interface ReadAsync extends Read {
+interface ActualModule extends OriginalModule {
   default: ((...args: any) => any) | undefined
 }
 
-const unmockReadAsync = (
-  mockedReadAsync: MockedReadAsync,
-  readPath: string
+const unmock = (
+  mockedModule: MockedModule,
+  moduleName: string
 ): void => {
-  const readAsync: ReadAsync = jest.requireActual(readPath)
-  mockedReadAsync.mockImplementation(readAsync.default)
+  const actualModule: ActualModule = jest.requireActual(moduleName)
+  mockedModule.mockImplementation(actualModule.default)
 }
 
-export default unmockReadAsync
+export default unmock
