@@ -9,7 +9,7 @@ import unmockReadSync from '@tests/unmocks/readSync'
 
 import { movePath, initPath } from '@/utils'
 
-import { read, readSync } from '.'
+import { read, readSync, validateSkippedStacks } from '.'
 
 jest.mock('@mnrendra/stack-trace', () => ({
   stackTrace: jest.fn()
@@ -259,6 +259,29 @@ describe('Test all features:', () => {
 
         expect(received).toEqual(expected)
       })
+    })
+  })
+
+  describe('Test `validateSkippedStacks` feature:', () => {
+    it('Should return a valid skipped-stacks when given a skipped-stack!', () => {
+      const received = validateSkippedStacks('any')
+      const expected = ['any']
+
+      expect(received).toEqual(expected)
+    })
+
+    it('Should return a valid skipped-stacks when given a skipped-stack and a `skippedStacks` option with a string!', () => {
+      const received = validateSkippedStacks('any', 'any')
+      const expected = ['any', 'any']
+
+      expect(received).toEqual(expected)
+    })
+
+    it('Should return a valid skipped-stacks when given a skipped-stack and a `skippedStacks` option with a list of strings!', () => {
+      const received = validateSkippedStacks('any', ['any'])
+      const expected = ['any', 'any']
+
+      expect(received).toEqual(expected)
     })
   })
 })

@@ -1,4 +1,4 @@
-import validateSkippedStacks from '@mnrendra/validate-skipped-stacks'
+import { validateSkippedStacks } from '@mnrendra/validate-skipped-stacks'
 
 import mainAsync from './async'
 import mainSync from './sync'

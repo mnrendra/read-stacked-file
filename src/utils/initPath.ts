@@ -3,7 +3,7 @@ import type { SkippedStacks } from '../types'
 import { dirname, resolve } from 'node:path'
 
 import { stackTrace } from '@mnrendra/stack-trace'
-import validateSkippedStacks from '@mnrendra/validate-skipped-stacks'
+import { validateSkippedStacks } from '@mnrendra/validate-skipped-stacks'
 
 import { SKIPPED_STACK } from '../consts'
 
