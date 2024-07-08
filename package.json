@@ -27,7 +27,7 @@
   "homepage": "https://github.com/mnrendra/read-stacked-file#readme",
   "dependencies": {
     "@mnrendra/stack-trace": "^1.3.0",
-    "@mnrendra/validate-skipped-stacks": "^1.0.2"
+    "@mnrendra/validate-skipped-stacks": "^2.0.0"
   },
   "devDependencies": {
     "@semantic-release/exec": "^6.0.3",

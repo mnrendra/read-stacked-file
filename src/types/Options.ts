@@ -6,6 +6,11 @@ interface Options {
    * or `@mnrendra/read-stacked-file`. So, you can get the stack(s) of your
    * consumer target file.
    *
+   * It can be a string or a list of strings. Make sure the string(s) is/are the
+   * name(s) of the stack trace(s) to be skipped.
+   *
+   * @default []
+   *
    * @see https://github.com/mnrendra/validate-skipped-stacks
    */
   skippedStacks?: SkippedStacks
@@ -13,6 +18,8 @@ interface Options {
   /**
    * `@mnrendra/stack-trace`'s limit specifies the number of stack frames to be
    * collected by a stack trace.
+   *
+   * @default 10
    *
    * @see https://github.com/mnrendra/stack-trace
    */
