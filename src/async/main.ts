@@ -7,25 +7,27 @@ import { initPath, movePath } from '../utils'
 import read from './read'
 
 /**
- * Read obtained file asynchronously.
+ * Read the stacked file asynchronously.
  *
  * @param {string} targetedFile - Targeted file to be obtained.
  * @param {Options} [options] - Optional params.
  *
  * @returns {Promise<string>} Obtained value.
+ *
+ * @see https://github.com/mnrendra/read-stacked-file#readme
  */
 const main = async (
   targetedFile: string,
   {
-    skippedStacks,
-    stackTraceLimit
-  }: Options = {
-    skippedStacks: [],
-    stackTraceLimit: 10
-  }
+    skippedStacks = [],
+    stackTraceLimit = 10,
+    useCWD = false
+  }: Options = {}
 ): Promise<string> => {
   // Initialize path.
-  let path = initPath(targetedFile, skippedStacks, stackTraceLimit)
+  let path = useCWD
+    ? process.cwd()
+    : initPath(targetedFile, skippedStacks, stackTraceLimit)
 
   // Read initial path.
   let data = await read(path)
@@ -48,5 +50,4 @@ const main = async (
   return data
 }
 
-// Export `main` as the default value.
 export default main

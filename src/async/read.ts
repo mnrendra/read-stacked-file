@@ -1,12 +1,5 @@
 import { readFile } from 'node:fs'
 
-/**
- * Read file asynchronously.
- *
- * @param {string} path - File path.
- *
- * @returns {Promise<string|undefined>} File data in a promise.
- */
 const read = async (
   path: string
 ): Promise<string | undefined> => {
@@ -23,5 +16,4 @@ const read = async (
   })
 }
 
-// Export `read` as the default value.
 export default read

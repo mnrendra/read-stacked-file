@@ -1,12 +1,5 @@
 import { readFileSync } from 'node:fs'
 
-/**
- * Read file synchronously.
- *
- * @param {string} path - File path.
- *
- * @returns {string|undefined} File data.
- */
 const read = (
   path: string
 ): string | undefined => {
@@ -23,5 +16,4 @@ const read = (
   }
 }
 
-// Export `read` as the default value.
 export default read

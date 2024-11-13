@@ -1,13 +1,5 @@
 import { basename, dirname, resolve } from 'node:path'
 
-/**
- * Move path.
- *
- * @param {string} path - Path to be moved.
- * @param {string} aim - Aimed directory.
- *
- * @returns {string} Moved path.
- */
 const movePath = (
   path: string,
   aim: string
@@ -28,5 +20,4 @@ const movePath = (
   return movedPath
 }
 
-// Export the `movePath` as the default value.
 export default movePath

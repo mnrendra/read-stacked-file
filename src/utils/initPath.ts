@@ -1,31 +1,20 @@
-import type { SkippedStacks } from '../types'
-
 import { dirname, resolve } from 'node:path'
 
-import { stackTrace } from '@mnrendra/stack-trace'
-import { validateSkippedStacks } from '@mnrendra/validate-skipped-stacks'
+import {
+  type SkippedStacks,
+  stackTrace,
+  validateSkippedStacks
+} from '@mnrendra/stack-trace'
 
 import { SKIPPED_STACK } from '../consts'
 
-/**
- * Initialize path.
- *
- * @param {string} basename - Base name (file name) to be resolved with the
- * initialize path.
- * @param {string|string[]} [skippedStacks] - Stack paths to be skipped
- * (optional).
- * @param {number} [limit] - The number of stack frames collected by a stack
- * trace (optional).
- *
- * @returns {string} Initialized path.
- */
 const initPath = (
   basename: string,
   skippedStacks: SkippedStacks = [],
   limit: number = 10
 ): string => {
   // Trace stacks.
-  const stacks = stackTrace(undefined, { limit })
+  const stacks = stackTrace(null, { limit })
 
   // Map stack trace paths.
   const paths = stacks.map((stack) =>
@@ -44,7 +33,7 @@ const initPath = (
     )
   ))
 
-  // Throw an error if the path is undefined.
+  // Throw an error if the path is invalid.
   if (typeof path !== 'string' || path === '') {
     throw new Error(`Unable to locate the initial path of "${basename}".`)
   }
@@ -59,5 +48,4 @@ const initPath = (
   return initialPath
 }
 
-// Export the `initPath` as the default value.
 export default initPath

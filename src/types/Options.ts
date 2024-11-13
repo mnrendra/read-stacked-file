@@ -1,4 +1,4 @@
-import type { SkippedStacks } from '.'
+import type { SkippedStacks } from '@mnrendra/stack-trace'
 
 interface Options {
   /**
@@ -24,6 +24,13 @@ interface Options {
    * @see https://github.com/mnrendra/stack-trace
    */
   stackTraceLimit?: number
+
+  /**
+   * If set to `true`, it will use `process.cwd()` instead of `@mnrendra/stack-trace` to get the target path.
+   * 
+   * @default false
+   */
+  useCWD?: boolean
 }
 
 export default Options
