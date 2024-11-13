@@ -1,16 +1,17 @@
-import { validateSkippedStacks } from '@mnrendra/validate-skipped-stacks'
-
 import mainAsync from './async'
 import mainSync from './sync'
 
+export {
+  type SkippedStacks,
+  type ValidSkippedStacks,
+  validateSkippedStacks
+} from '@mnrendra/stack-trace'
+
 export type {
-  Options,
-  SkippedStacks,
-  ValidSkippedStacks
+  Options
 } from './types'
 
 export {
   mainAsync as read,
-  mainSync as readSync,
-  validateSkippedStacks
+  mainSync as readSync
 }
