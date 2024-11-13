@@ -123,7 +123,7 @@ describe('Test all features:', () => {
     })
   })
 
-  describe('Test `validateSkippedStacks` feature:', () => {
+  describe('Test `validateSkippedStacks` util:', () => {
     it('Should return a valid skipped-stacks when given a skipped-stack!', () => {
       const received = validateSkippedStacks('any')
       const expected = ['any']
