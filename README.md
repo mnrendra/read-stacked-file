@@ -119,6 +119,10 @@ A name or a list of names of stack traces that need to be skipped.
 *type: `number`*<br/>
 *default: `10`*<br/>
 The `Error.stackTraceLimit` property specifies the number of stack frames to be collected by a stack trace.
+### • `useCWD`
+*type: `boolean`*<br/>
+*default: `false`*<br/>
+If set to `true`, it will use `process.cwd()` instead of `@mnrendra/stack-trace` to get the target path.
 
 ## Utilities
 ```javascript

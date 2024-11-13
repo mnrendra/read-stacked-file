@@ -19,15 +19,15 @@ import read from './read'
 const main = (
   targetedFile: string,
   {
-    skippedStacks,
-    stackTraceLimit
-  }: Options = {
-    skippedStacks: [],
-    stackTraceLimit: 10
-  }
+    skippedStacks = [],
+    stackTraceLimit = 10,
+    useCWD = false
+  }: Options = {}
 ): string => {
   // Initialize path.
-  let path = initPath(targetedFile, skippedStacks, stackTraceLimit)
+  let path = useCWD
+    ? process.cwd()
+    : initPath(targetedFile, skippedStacks, stackTraceLimit)
 
   // Read initial path.
   let data = read(path)
