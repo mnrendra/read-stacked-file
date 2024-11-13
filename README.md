@@ -110,19 +110,29 @@ read('package.json')
   });
 ```
 
-## Utility
+## Options
+### • `skippedStacks`
+*type: `string|string[]`*<br/>
+*default: `[]`*<br/>
+A name or a list of names of stack traces that need to be skipped.
+### • `stackTraceLimit`
+*type: `number`*<br/>
+*default: `10`*<br/>
+The `Error.stackTraceLimit` property specifies the number of stack frames to be collected by a stack trace.
+
+## Utilities
 ```javascript
 import {
-  validateSkippedStacks // To validate the list of stacks to be skipped. More info: @mnrendra/validate-skipped-stacks
+  validateSkippedStacks // To validate a name or a list of names of stack traces that need to be skipped. More info: @see https://github.com/mnrendra/validate-skipped-stacks
 } from '@mnrendra/read-stacked-file'
 ```
 
 ## Types
 ```typescript
 import type {
-  Options, // @mnrendra/read-stacked-file options.
-  SkippedStacks, // @mnrendra/validate-skipped-stacks input.
-  ValidSkippedStacks // @mnrendra/validate-skipped-stacks output.
+  Options, // @mnrendra/read-stacked-file options
+  SkippedStacks, // @mnrendra/validate-skipped-stacks input
+  ValidSkippedStacks // @mnrendra/validate-skipped-stacks output
 } from '@mnrendra/read-stacked-file'
 ```
 

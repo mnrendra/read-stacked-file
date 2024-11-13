@@ -7,12 +7,14 @@ import { initPath, movePath } from '../utils'
 import read from './read'
 
 /**
- * Read obtained file asynchronously.
+ * Read the stacked file asynchronously.
  *
  * @param {string} targetedFile - Targeted file to be obtained.
  * @param {Options} [options] - Optional params.
  *
  * @returns {Promise<string>} Obtained value.
+ *
+ * @see https://github.com/mnrendra/read-stacked-file#readme
  */
 const main = async (
   targetedFile: string,
@@ -48,5 +50,4 @@ const main = async (
   return data
 }
 
-// Export `main` as the default value.
 export default main
