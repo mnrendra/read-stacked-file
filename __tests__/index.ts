@@ -65,6 +65,13 @@ describe('Test all features:', () => {
 
         expect(received).toEqual(expected)
       })
+
+      it('Should resolve the file data by setting `useCWD` option to be `true`!', async () => {
+        const received = await read('tsconfig.json', { useCWD: true })
+        const expected = expect.any(String)
+
+        expect(received).toEqual(expected)
+      })
     })
   })
 
@@ -116,6 +123,13 @@ describe('Test all features:', () => {
 
       it('Should return the file data by adding a list of skipped stacks!', () => {
         const received = readSync('package.json', { skippedStacks: ['any'] })
+        const expected = expect.any(String)
+
+        expect(received).toEqual(expected)
+      })
+
+      it('Should return the file data by setting `useCWD` option to be `true`!', () => {
+        const received = readSync('tsconfig.json', { useCWD: true })
         const expected = expect.any(String)
 
         expect(received).toEqual(expected)
