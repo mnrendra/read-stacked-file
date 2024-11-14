@@ -1,6 +1,6 @@
 import type { Options } from '../types'
 
-import { basename, resolve } from 'node:path'
+import { basename, normalize, resolve } from 'node:path'
 
 import { initPath, movePath } from '../utils'
 
@@ -25,9 +25,7 @@ const main = (
   }: Options = {}
 ): string => {
   // Initialize path.
-  let path = useCWD
-    ? process.cwd()
-    : initPath(targetedFile, skippedStacks, stackTraceLimit)
+  let path = initPath(targetedFile, skippedStacks, stackTraceLimit, useCWD)
 
   // Read initial path.
   let data = read(path)
@@ -41,7 +39,7 @@ const main = (
     data = read(path)
 
     // Stop looping when unable to obtain the file data.
-    if (path === resolve('/', targetedFile) && typeof data !== 'string') {
+    if (path === normalize(resolve('/', targetedFile)) && typeof data !== 'string') {
       throw new Error(`Unable to find the "${basename(targetedFile)}" file.`)
     }
   }

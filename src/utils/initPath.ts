@@ -11,8 +11,15 @@ import { SKIPPED_STACK } from '../consts'
 const initPath = (
   basename: string,
   skippedStacks: SkippedStacks = [],
-  limit: number = 10
+  limit: number = 10,
+  useCWD: boolean = false
 ): string => {
+  // Handle `useCWD` option.
+  if (useCWD) {
+    // Return the initialized path.
+    return resolve(process.cwd(), basename)
+  }
+
   // Trace stacks.
   const stacks = stackTrace(null, { limit })
 
@@ -41,11 +48,8 @@ const initPath = (
   // Get the directory name.
   const dir = dirname(path)
 
-  // Resolve the initial path.
-  const initialPath = resolve(dir, basename)
-
   // Return the initialized path.
-  return initialPath
+  return resolve(dir, basename)
 }
 
 export default initPath
