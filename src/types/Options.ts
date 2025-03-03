@@ -2,7 +2,7 @@ import type { SkippedStacks } from '@mnrendra/stack-trace'
 
 /**
  * The options interface.
- * 
+ *
  * @see https://github.com/mnrendra/read-stacked-file#readme
  */
 interface Options {
@@ -28,7 +28,7 @@ interface Options {
   /**
    * If set to `true`, it will use `process.cwd()` instead of
    * `@mnrendra/stack-trace` to get the target path.
-   * 
+   *
    * @default false
    */
   useCWD?: boolean
