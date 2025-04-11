@@ -1,5 +1,7 @@
-import unmockStackTrace from './stackTrace'
+import unmockFileURLToPath from './fileURLToPath'
+import unmockTraceFiles from './traceFiles'
 
 export {
-  unmockStackTrace
+  unmockFileURLToPath,
+  unmockTraceFiles
 }
