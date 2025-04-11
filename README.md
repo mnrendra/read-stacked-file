@@ -1,5 +1,11 @@
 # @mnrendra/read-stacked-file
-Read the stacked file from any sub-directory in your project.
+
+![npm version](https://img.shields.io/npm/v/@mnrendra/stack-trace)
+![types](https://img.shields.io/npm/types/@mnrendra/stack-trace)
+![license](https://img.shields.io/npm/l/@mnrendra/stack-trace)
+
+Read a file based on the stack trace from any subdirectory in your project.<br/>
+*Useful for reading files relative to the original caller function — even when deeply nested — ideal for accessing config files like `package.json`, `.env`, and more.*
 
 ## Install
 ```bash
@@ -8,34 +14,46 @@ npm i @mnrendra/read-stacked-file
 
 ## Usage
 
-Using `CommonJS`:
+### Using `CommonJS`:
 ```javascript
-const { read, readSync } = require('@mnrendra/read-stacked-file')
+const { readStackedFile, readStackedFileSync } = require('@mnrendra/read-stacked-file')
 
 // Asynchronously
-read('file.name')
-  .then((data) => {
-    console.log('asynchronously:', data)
-  })
+const readAsync = async () => {
+  const data = await readStackedFile('package.json')
+  console.log('asynchronously:', data)
+}
+
+readAsync()
 
 // Synchronously
-const data = readSync('file.name')
-console.log('synchronously:', data)
+const readSync = () => {
+  const data = readStackedFileSync('package.json')
+  console.log('synchronously:', data)
+}
+
+readSync()
 ```
 
-Using `ES Module`:
+### Using `ES Modules`:
 ```javascript
-import { read, readSync } from '@mnrendra/read-stacked-file'
+import { readStackedFile, readStackedFileSync } from '@mnrendra/read-stacked-file'
 
 // Asynchronously
-read('file.name')
-  .then((data) => {
-    console.log('asynchronously:', data)
-  })
+const readAsync = async () => {
+  const data = await readStackedFile('package.json')
+  console.log('asynchronously:', data)
+}
+
+readAsync()
 
 // Synchronously
-const data = readSync('file.name')
-console.log('synchronously:', data)
+const readSync = () => {
+  const data = readStackedFileSync('package.json')
+  console.log('synchronously:', data)
+}
+
+readSync()
 ```
 
 ### Examples
@@ -49,29 +67,35 @@ Assuming your project's `~/project-name/package.json` file is as follows:
 }
 ```
 
-Then, you can access and read the `~/project-name/package.json` file from any directory within your project.<br/>
-Here are some examples:<br/>
+This lets you read the `~/project-name/package.json` file from any directory in your project.<br/>
+Examples:<br/>
 
 ##### • Read from `~/project-name/src/index.js`:
 ```javascript
-const { readSync } = require('@mnrendra/read-stacked-file')
+const { readStackedFileSync } = require('@mnrendra/read-stacked-file')
 
 // Synchronously
-const data = readSync('package.json')
-const { name, version } = JSON.parse(data)
-console.log('synchronously:', name, version) // Output: synchronously: project-name 1.0.0
+const main = () => {
+  const data = readStackedFileSync('package.json')
+  const { name, version } = JSON.parse(data)
+  console.log('synchronously:', name, version) // Output: synchronously: project-name 1.0.0
+}
+
+main()
 ```
 
 ##### • Read from `~/project-name/src/any-directory/index.mjs`:
 ```javascript
-import { read } from '@mnrendra/read-stacked-file'
+import { readStackedFile } from '@mnrendra/read-stacked-file'
 
 // Asynchronously
-read('package.json')
-  .then((data) => {
-    const { name, version } = JSON.parse(data)
-    console.log('asynchronously:', name, version) // Output: asynchronously: project-name 1.0.0
-  })
+const main = async () => {
+  const data = await readStackedFile('package.json')
+  const { name, version } = JSON.parse(data)
+  console.log('asynchronously:', name, version) // Output: asynchronously: project-name 1.0.0
+}
+
+main()
 ```
 
 #### 2. Read the `package.json` file in your published module:
@@ -83,60 +107,56 @@ Assuming your module is installed in the `/consumer/node_modules/module-name/` d
 }
 ```
 
-Then, you can access and read your `package.json` file from any directory within your module.<br/>
+This lets you access and read your module’s `package.json` file from any directory within the module itself.<br/>
 Here are some examples:<br/>
 
 ##### • Read from `/consumer/node_modules/module-name/dist/index.js`:
 ```javascript
 "use strict";
-const { readSync } = require('@mnrendra/read-stacked-file');
+
+const { readStackedFileSync } = require('@mnrendra/read-stacked-file');
 
 // Synchronously
-const data = readSync('package.json');
-const { name, version } = JSON.parse(data)
-console.log('synchronously:', name, version); // Output: synchronously: module-name 1.0.0
+const main = () => {
+  const data = readStackedFileSync('package.json');
+  const { name, version } = JSON.parse(data);
+  console.log('synchronously:', name, version); // Output: synchronously: module-name 1.0.0
+}
+
+main();
 ```
 
 ##### • Read from `/consumer/node_modules/module-name/dist/any-directory/index.js`:
 ```javascript
 "use strict";
-const { read } = require('@mnrendra/read-stacked-file');
+
+const { readStackedFile } = require('@mnrendra/read-stacked-file');
 
 // Asynchronously
-read('package.json')
-  .then((data) => {
-    const { name, version } = JSON.parse(data)
-    console.log('asynchronously:', name, version); // Output: asynchronously: module-name 1.0.0
-  });
+const main = async () => {
+  const data = await readStackedFile('package.json');
+  const { name, version } = JSON.parse(data);
+  console.log('asynchronously:', name, version); // Output: asynchronously: module-name 1.0.0
+}
+
+main();
 ```
 
 ## Options
-### • `skippedStacks`
-*type: `string|string[]`*<br/>
-*default: `[]`*<br/>
-A name or a list of names of stack traces that need to be skipped.
-### • `stackTraceLimit`
-*type: `number`*<br/>
-*default: `10`*<br/>
-The `Error.stackTraceLimit` property specifies the number of stack frames to be collected by a stack trace.
-### • `useCWD`
-*type: `boolean`*<br/>
-*default: `false`*<br/>
-If set to `true`, it will use `process.cwd()` instead of `@mnrendra/stack-trace` to get the target path.
 
-## Utilities
-```javascript
-import {
-  validateSkippedStacks // To validate a name or a list of names of stack traces that need to be skipped. More info: @see https://github.com/mnrendra/validate-skipped-stacks
-} from '@mnrendra/read-stacked-file'
-```
+### • `caller`
+**Type:** `(...args: any) => any`<br/>
+A caller function to serve as the stack-trace target.
+
+### • `stackTraceLimit`
+**Type:** `number`<br/>
+**Default:** `10`<br/>
+The `Error.stackTraceLimit` property specifies the number of stack frames to be collected by a stack trace.
 
 ## Types
 ```typescript
 import type {
-  Options, // @mnrendra/read-stacked-file options
-  SkippedStacks, // @mnrendra/validate-skipped-stacks input
-  ValidSkippedStacks // @mnrendra/validate-skipped-stacks output
+  Options, // Types for options in @mnrendra/read-stacked-file
 } from '@mnrendra/read-stacked-file'
 ```
 

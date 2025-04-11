@@ -1,5 +1,7 @@
-import mockedStackTrace from './stackTrace'
+import mockedFileURLToPath from './fileURLToPath'
+import mockedTraceFiles from './traceFiles'
 
 export {
-  mockedStackTrace
+  mockedFileURLToPath,
+  mockedTraceFiles
 }

@@ -1,55 +1,23 @@
-import { dirname, resolve } from 'node:path'
+import { dirname, isAbsolute, resolve } from 'node:path'
 
-import {
-  type SkippedStacks,
-  stackTrace,
-  validateSkippedStacks
-} from '@mnrendra/stack-trace'
+import { traceFiles } from '@mnrendra/stack-trace'
 
-import { SKIPPED_STACK } from '../consts'
+import validateFile from './validateFile'
 
 const initPath = (
-  basename: string,
-  skippedStacks: SkippedStacks = [],
-  limit: number = 10,
-  useCWD: boolean = false
+  targetFile: string,
+  caller: (...args: any) => any,
+  limit: number = 10
 ): string => {
-  // Handle `useCWD` option.
-  if (useCWD) {
-    // Return the initialized path.
-    return resolve(process.cwd(), basename)
-  }
+  if (isAbsolute(targetFile)) return resolve(targetFile)
 
-  // Trace stacks.
-  const stacks = stackTrace(null, { limit })
+  const [file] = traceFiles(caller, { limit })
 
-  // Map stack trace paths.
-  const paths = stacks.map((stack) =>
-    typeof stack.getFileName() === 'string' && stack.getFileName() !== ''
-      ? stack.getFileName()
-      : SKIPPED_STACK
-  )
+  const validFile = validateFile(targetFile, file)
 
-  // Validate skipped stacks.
-  const validSkippedStacks = validateSkippedStacks(SKIPPED_STACK, skippedStacks)
+  const dir = dirname(validFile)
 
-  // Find the initial path.
-  const path = paths.find((path) => !(
-    validSkippedStacks.some((skippedStack) =>
-      typeof path === 'string' && path !== '' && path.includes(skippedStack)
-    )
-  ))
-
-  // Throw an error if the path is invalid.
-  if (typeof path !== 'string' || path === '') {
-    throw new Error(`Unable to locate the initial path of "${basename}".`)
-  }
-
-  // Get the directory name.
-  const dir = dirname(path)
-
-  // Return the initialized path.
-  return resolve(dir, basename)
+  return resolve(dir, targetFile)
 }
 
 export default initPath
