@@ -1,5 +1,3 @@
-import type { SkippedStacks } from '@mnrendra/stack-trace'
-
 /**
  * The options interface.
  *
@@ -7,13 +5,11 @@ import type { SkippedStacks } from '@mnrendra/stack-trace'
  */
 interface Options {
   /**
-   * A name or a list of names of stack traces that need to be skipped.
-   *
-   * @default []
+   * A caller function to serve as the stack-trace target.
    *
    * @see https://github.com/mnrendra/read-stacked-file#readme
    */
-  skippedStacks?: SkippedStacks
+  caller?: (...args: any) => any
 
   /**
    * The `Error.stackTraceLimit` property specifies the number of stack frames
@@ -24,14 +20,6 @@ interface Options {
    * @see https://github.com/mnrendra/read-stacked-file#readme
    */
   stackTraceLimit?: number
-
-  /**
-   * If set to `true`, it will use `process.cwd()` instead of
-   * `@mnrendra/stack-trace` to get the target path.
-   *
-   * @default false
-   */
-  useCWD?: boolean
 }
 
 export default Options

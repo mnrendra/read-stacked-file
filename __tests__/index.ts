@@ -1,135 +1,90 @@
-import mockedStackTrace from '@tests/mocks/stackTrace'
-import unmockStackTrace from '@tests/unmocks/stackTrace'
+import { resolve } from 'node:path'
 
-import { read, readSync, validateSkippedStacks } from '..'
+import mockedFileURLToPath from '@tests/mocks/fileURLToPath'
+import mockedTraceFiles from '@tests/mocks/traceFiles'
+
+import unmockFileURLToPath from '@tests/unmocks/fileURLToPath'
+import unmockTraceFiles from '@tests/unmocks/traceFiles'
+
+import { readStackedFile, readStackedFileSync } from '..'
 
 jest.mock('@mnrendra/stack-trace', () => ({
-  stackTrace: jest.fn(),
-  validateSkippedStacks: jest.requireActual('@mnrendra/stack-trace').validateSkippedStacks
+  traceStacks: jest.fn(),
+  traceFnNames: jest.fn(),
+  traceFiles: jest.fn(() => [])
 }))
 
-jest.mock('@/async/read')
-
-jest.mock('@/sync/read')
+jest.mock('node:url', () => ({
+  fileURLToPath: jest.fn(() => '')
+}))
 
 describe('Test all features:', () => {
-  describe('Test `read` feature:', () => {
-    describe('By mocking `initPath` to reject with an error:', () => {
+  describe('Test `readStackedFile` feature:', () => {
+    describe('By mocking `traceFiles` to return invalid values:', () => {
       beforeAll(() => {
-        mockedStackTrace.mockReturnValue([
-          { getFileName: () => undefined },
-          { getFileName: () => null },
-          { getFileName: () => '' }
-        ] as NodeJS.CallSite[])
+        mockedTraceFiles.mockReturnValue([undefined, null, ''])
       })
 
       afterAll(() => {
-        unmockStackTrace(mockedStackTrace)
+        unmockTraceFiles(mockedTraceFiles)
       })
 
       it('Should reject with an error when unable to locate the initial path!', async () => {
-        const received = read('any.file')
-        const expected = Error('Unable to locate the initial path of "any.file".')
+        const received = readStackedFile('any.file')
+        const expected = 'Unable to locate the initial path of "any.file".'
 
         await expect(received).rejects.toThrow(expected)
       })
     })
 
-    describe('By mocking `read` async to resolve a non-string value:', () => {
-      it('Should reject with an error when unable to obtain the file!', async () => {
-        const received = read('any.file')
-        const expected = Error('Unable to find the "any.file" file.')
-
-        await expect(received).rejects.toThrow(expected)
-      })
-    })
-
-    describe('Without mocking anything:', () => {
-      it('Should resolve the file data when able to obtain the file!', async () => {
-        const received = await read('package.json')
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-
-      it('Should resolve the file data by adding a skipped stack!', async () => {
-        const received = await read('package.json', { skippedStacks: 'any' })
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-
-      it('Should resolve the file data by adding a list of skipped stacks!', async () => {
-        const received = await read('package.json', { skippedStacks: ['any'] })
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-
-      it('Should resolve the file data by setting `useCWD` option to be `true`!', async () => {
-        const received = await read('tsconfig.json', { useCWD: true })
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-    })
-  })
-
-  describe('Test `readSync` reature:', () => {
-    describe('By mocking `initPath` to throw an error:', () => {
+    describe('By mocking `traceFiles` to return invalid URL values:', () => {
       beforeAll(() => {
-        mockedStackTrace.mockReturnValue([
-          { getFileName: () => undefined },
-          { getFileName: () => null },
-          { getFileName: () => '' }
-        ] as NodeJS.CallSite[])
+        mockedTraceFiles.mockReturnValue([`file://${__filename}`])
+        mockedFileURLToPath.mockReturnValue(__filename)
       })
 
       afterAll(() => {
-        unmockStackTrace(mockedStackTrace)
+        unmockTraceFiles(mockedTraceFiles)
+        unmockFileURLToPath(mockedFileURLToPath)
       })
 
-      it('Should throw an error when unable to locate the initial path!', () => {
-        const received = (): void => { readSync('any.file') }
-        const expected = Error('Unable to locate the initial path of "any.file".')
+      it('Should reject with an error when unable to find the target file!', async () => {
+        const received = readStackedFile('any.file')
+        const expected = 'Unable to find the "any.file" file.'
 
-        expect(received).toThrow(expected)
+        await expect(received).rejects.toThrow(expected)
       })
     })
 
-    describe('By mocking `read` sync to return a non-string value:', () => {
-      it('Should throw an error when unable to obtain the file!', () => {
-        const received = (): void => { readSync('any.file') }
-        const expected = Error('Unable to find the "any.file" file.')
+    describe('By mocking `traceFiles` to return invalid URL values and mocking `fileURLToPath` to return non-absolute path:', () => {
+      beforeAll(() => {
+        mockedTraceFiles.mockReturnValue([`file://${__filename}`])
+        mockedFileURLToPath.mockReturnValue('../foo.mjs')
+      })
 
-        expect(received).toThrow(expected)
+      afterAll(() => {
+        unmockTraceFiles(mockedTraceFiles)
+        unmockFileURLToPath(mockedFileURLToPath)
+      })
+
+      it('Should reject with an error when unable to locate the initial path!', async () => {
+        const received = readStackedFile('any.file')
+        const expected = 'Unable to locate the initial path of "any.file".'
+
+        await expect(received).rejects.toThrow(expected)
       })
     })
 
     describe('Without mocking anything:', () => {
-      it('Should return the file data when able to obtain the file!', () => {
-        const received = readSync('package.json')
+      it('Should resolve the target file data when able to find the target file!', async () => {
+        const received = await readStackedFile('package.json')
         const expected = expect.any(String)
 
         expect(received).toEqual(expected)
       })
 
-      it('Should return the file data by adding a skipped stack!', () => {
-        const received = readSync('package.json', { skippedStacks: 'any' })
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-
-      it('Should return the file data by adding a list of skipped stacks!', () => {
-        const received = readSync('package.json', { skippedStacks: ['any'] })
-        const expected = expect.any(String)
-
-        expect(received).toEqual(expected)
-      })
-
-      it('Should return the file data by setting `useCWD` option to be `true`!', () => {
-        const received = readSync('tsconfig.json', { useCWD: true })
+      it('Should resolve the target file data without tracing anything when given an absolute path!', async () => {
+        const received = await readStackedFile(resolve(__dirname, 'package.json'))
         const expected = expect.any(String)
 
         expect(received).toEqual(expected)
@@ -137,26 +92,76 @@ describe('Test all features:', () => {
     })
   })
 
-  describe('Test `validateSkippedStacks` util:', () => {
-    it('Should return a valid skipped-stacks when given a skipped-stack!', () => {
-      const received = validateSkippedStacks('any')
-      const expected = ['any']
+  describe('Test `readStackedFileSync` reature:', () => {
+    describe('By mocking `traceFiles` to return invalid values:', () => {
+      beforeAll(() => {
+        mockedTraceFiles.mockReturnValue([undefined, null, ''])
+      })
 
-      expect(received).toEqual(expected)
+      afterAll(() => {
+        unmockTraceFiles(mockedTraceFiles)
+      })
+
+      it('Should throw an error when unable to locate the initial path!', () => {
+        const received = (): void => { readStackedFileSync('any.file') }
+        const expected = 'Unable to locate the initial path of "any.file".'
+
+        expect(received).toThrow(expected)
+      })
     })
 
-    it('Should return a valid skipped-stacks when given a skipped-stack and a `skippedStacks` option with a string!', () => {
-      const received = validateSkippedStacks('any', 'any')
-      const expected = ['any', 'any']
+    describe('By mocking `traceFiles` to return URL values:', () => {
+      beforeAll(() => {
+        mockedTraceFiles.mockReturnValue([`file://${__filename}`])
+        mockedFileURLToPath.mockReturnValue(__filename)
+      })
 
-      expect(received).toEqual(expected)
+      afterAll(() => {
+        unmockTraceFiles(mockedTraceFiles)
+        unmockFileURLToPath(mockedFileURLToPath)
+      })
+
+      it('Should reject with an error when unable to find the target file!', () => {
+        const received = (): void => { readStackedFileSync('any.file') }
+        const expected = 'Unable to find the "any.file" file.'
+
+        expect(received).toThrow(expected)
+      })
     })
 
-    it('Should return a valid skipped-stacks when given a skipped-stack and a `skippedStacks` option with a list of strings!', () => {
-      const received = validateSkippedStacks('any', ['any'])
-      const expected = ['any', 'any']
+    describe('By mocking `traceFiles` to return URL values and mocking `fileURLToPath` to return non-absolute path:', () => {
+      beforeAll(() => {
+        mockedTraceFiles.mockReturnValue([`file://${__filename}`])
+        mockedFileURLToPath.mockReturnValue('../foo.mjs')
+      })
 
-      expect(received).toEqual(expected)
+      afterAll(() => {
+        unmockTraceFiles(mockedTraceFiles)
+        unmockFileURLToPath(mockedFileURLToPath)
+      })
+
+      it('Should reject with an error when unable to locate the initial path!', () => {
+        const received = (): void => { readStackedFileSync('any.file') }
+        const expected = 'Unable to locate the initial path of "any.file".'
+
+        expect(received).toThrow(expected)
+      })
+    })
+
+    describe('Without mocking anything:', () => {
+      it('Should return the target file data when able to find the target file!', () => {
+        const received = readStackedFileSync('package.json')
+        const expected = expect.any(String)
+
+        expect(received).toEqual(expected)
+      })
+
+      it('Should return the target file data without tracing anything when given an absolute path!', () => {
+        const received = readStackedFileSync(resolve(__dirname, 'package.json'))
+        const expected = expect.any(String)
+
+        expect(received).toEqual(expected)
+      })
     })
   })
 })
