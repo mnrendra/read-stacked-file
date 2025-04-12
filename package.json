@@ -1,6 +1,6 @@
 {
   "name": "@mnrendra/read-stacked-file",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Read a file based on the stack trace from any subdirectory in your project.",
   "private": false,
   "main": "dist/index.js",
