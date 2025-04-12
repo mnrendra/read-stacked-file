@@ -1,5 +1,5 @@
 /**
- * The options interface.
+ * The Options interface for `readStackedFile` and `readStackedFileSync`.
  *
  * @see https://github.com/mnrendra/read-stacked-file#readme
  */
