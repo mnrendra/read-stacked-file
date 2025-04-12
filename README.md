@@ -1,11 +1,11 @@
 # @mnrendra/read-stacked-file
 
-![npm version](https://img.shields.io/npm/v/@mnrendra/stack-trace)
-![types](https://img.shields.io/npm/types/@mnrendra/stack-trace)
-![license](https://img.shields.io/npm/l/@mnrendra/stack-trace)
+![npm version](https://img.shields.io/npm/v/@mnrendra/read-stacked-file)
+![types](https://img.shields.io/npm/types/@mnrendra/read-stacked-file)
+![license](https://img.shields.io/npm/l/@mnrendra/read-stacked-file)
 
 Read a file based on the stack trace from any subdirectory in your project.<br/>
-*Useful for reading files relative to the original caller function — even when deeply nested — ideal for accessing config files like `package.json`, `.env`, and more.*
+*Useful for reading files relative to the original caller — even when deeply nested. Ideal for accessing config files like `package.json`, `.env`, and more.*
 
 ## Install
 ```bash
@@ -13,8 +13,12 @@ npm i @mnrendra/read-stacked-file
 ```
 
 ## Usage
+- **`readStackedFile(targetFile?, options?)`**:<br/>
+Reads the stack-trace file asynchronously and returns the file data in a `Promise<string>`.
+- **`readStackedFileSync(targetFile?, options?)`**:<br/>
+Reads the stack-trace file synchronously and returns the file data in a `string`.
 
-### Using `CommonJS`:
+### Using **CommonJS**:
 ```javascript
 const { readStackedFile, readStackedFileSync } = require('@mnrendra/read-stacked-file')
 
@@ -35,7 +39,7 @@ const readSync = () => {
 readSync()
 ```
 
-### Using `ES Modules`:
+### Using **ES Modules**:
 ```javascript
 import { readStackedFile, readStackedFileSync } from '@mnrendra/read-stacked-file'
 
@@ -156,7 +160,7 @@ The `Error.stackTraceLimit` property specifies the number of stack frames to be 
 ## Types
 ```typescript
 import type {
-  Options, // Types for options in @mnrendra/read-stacked-file
+  Options // The Options interface for `readStackedFile` and `readStackedFileSync`.
 } from '@mnrendra/read-stacked-file'
 ```
 
